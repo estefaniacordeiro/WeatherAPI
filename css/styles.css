@@ -1,5 +1,42 @@
 * {
     box-sizing: border-box;
-    margin: 0;
+    margin: 10px;
     padding: 0;
+}
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(rgb(47, 150, 163), rgb(48, 62, 143));
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+    
+}
+.searchbar{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+.searchbar>input{
+    border-radius: 5px;
+    height: 30px;
+    font-size: large;
+}
+
+.date--container{
+    display: flex;
+    flex-direction: column;
+}
+
+.api-data--container{
+    display: flex;
+    flex-direction: row wrap;
+}
+img{
+    width: 100px;
 }
