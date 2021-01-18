@@ -6,28 +6,28 @@
     <title>Weather API</title>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous" defer></script>
-    <script defer src="js/main.js"></script>
+    <script defer src="js/main.js" defer></script>
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <div id="location-searchbar" class="searchbar">
+    <section id="location-searchbar" class="searchbar">
         <label for="location">Insert location</label>
-        <input type="text">
-        
-        <span class="error-message"></span>
-    </div>
-    <div class="date--container">
-        <h3 id="weekday" class="date">Monday</h3>
-        <h4 id="full-date" class="date">18/01/2021</h4>
-    </div>
-    <div class="api-data--container">
-        <div id="temperature">5ºC</div>
-        <div id="state-icons">
+        <input type="text" id="city">
+        <button class="sendBtn" id="sendBtn">Loop</button>
+        <section class="error-message"></section>
+    </section>
+    <section class="date--container">
+        <time id="weekday" class="date">Monday</time>
+        <time id="full-date" class="date">18/01/2021</time>
+    </section>
+    <section class="api-data--container">
+        <section id="temperature">5ºC</section>
+        <section id="state-icons">
             <img src="assets/svg/cloudy.svg" alt="cloudy day">
-        </div>
-        <div id="sunrise-time"></div>
-        <div id="sunset-time"></div>
-        <div id="wind-icons"></div>
-    </div>
+        </section>
+        <section id="sunrise-time"></section>
+        <section id="sunset-time"></section>
+        <section id="wind-icons"></section>
+    </section>
 </body>
 </html>
