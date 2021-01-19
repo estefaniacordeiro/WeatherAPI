@@ -10,15 +10,8 @@ function loadInitialDom() {
     let $inputCity = $(`<input type="text" id="city" class="input-city" onfocus="this.value=''" value="Insert a city">`);
     const $buttonSend = $('<button id="sendBtn" class="sendBtn">Search</button>');
     const $sectionMessageError = $('<section class="error-message"></section>');
-    let $dateContainer = $(`<section class="date--container">
-                                <time id="weekday" class="date"></time>
-                                <time id="full-date" class="date"></time>
-                            </section>`)
-    let $infoContainer = $(`<section class="api-data--container">
-                            </section>`)
     $('body').append($sectionLocation);
-    $sectionLocation.append($labelCity, $inputCity, $buttonSend, $sectionMessageError, $dateContainer, $infoContainer);
-    generateHTML()
+    $sectionLocation.append($labelCity, $inputCity, $buttonSend, $sectionMessageError);
 }
 
 function insertCity() {
@@ -32,17 +25,20 @@ function insertCity() {
         statusCode: {
             404: errorNotFound,
         }
-    }
-    $.ajax(requestGetInfoCity).done((responseInfoCity) => {
+    };
+
+    $.ajax(requestGetInfoCity).done(function (responseInfoCity) {
+        console.log(responseInfoCity);
         printNameCity(responseInfoCity);
-        dataUse(responseInfoCity);
-            
-        });
+        loadTotalDom();
+        dataUse(responseInfoCity)
+        printTemperatureCity(responseInfoCity);
+    });
 };
 
 function errorNotFound() {
     $('.error-message').text('This city doesn´t exist!').show();
-    //console.log($('.label-city'));
+    console.log($('.label-city'));
     $('.label-city')[0].textContent ='';
     $('#city').on('click', function() {
         $('.error-message').hide('slow');
@@ -53,26 +49,30 @@ function printNameCity(res) {
     $('.label-city').text(res.name);
 }
 
+function loadTotalDom() {
+    let $sectionDate = $('<section class="date--container"></section>');
+    let $dateWeek = $(`<time id="weekday" class="date">Monday</time>`);
+    let $fullDate = $(`<time id="full-date" class="date">18/01/2021</time>`);
+    let $sectionData = $('<section class="api-data--container"></section>');
+    let $temperature = $(`<section class="temperature" id="temperature"></section>`);
+    let $icons = $(`<section id="state-icons">s</section>`);
+    let $sunriseTime = $(`<section id="sunrise-time">s</section>`);
+    let $sunsetTime = $(`<section id="sunset-time">s</section>`);
+    let $windIcon = $(`<section id="wind-icons">s</section>`);
+    $('body').append($sectionDate);
+    $('body').append($sectionData);
+    $sectionDate.append($dateWeek, $fullDate);
+    $sectionData.append($temperature, $icons, $sunriseTime, $sunsetTime, $windIcon);
+}
+
+function printTemperatureCity(responseInfoCity) {
+    $('#temperature').html(Math.round(responseInfoCity.main.temp) + ' °C');
+}
+
 /*--------------------------Función para trabajar con los datos de la petición-------------------------------------*/
 function dataUse(response){
     renderTimes(response)
     renderDayAndDate()
-}
-
-function generateHTML(){
-    let $dayAndDate = `
-    <time id="weekday" class="date"></time>
-    <time id="full-date" class="date"></time>`
-    let $dataInContainer = `
-    <section id="temperature"></section>
-    <section id="state-icons">
-        <!--<img src="assets/svg/cloudy.svg" alt="cloudy day">-->
-    </section>
-    <section id="sunrise-time"></section>
-    <section id="sunset-time"></section>
-    <section id="wind-icons"></section>`
-    $(".date--container").append($dayAndDate)
-    $(".api-data--container").append($dataInContainer)
 }
 
 function formatTimes(date){
@@ -82,8 +82,8 @@ function formatTimes(date){
     if(min<10){min = '0' + min}
     if(s<10){s = '0' + s}
 
-    let returnTime = `<p>${h}:${min}:${s}</p>`
-    return returnTime
+    let returnTime = `<p>${h}:${min}:${s}</p>`;
+    return returnTime;
 }
 
 function renderTimes(response){
