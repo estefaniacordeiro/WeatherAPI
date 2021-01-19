@@ -20,6 +20,7 @@ body {
     width: 80%;
     margin-left: auto;
     margin-right: auto;
+    /* border: 1px solid yellow; */
 }
 .searchbar>input{
     border-radius: 5px;
@@ -55,15 +56,26 @@ body {
 .date--container{
     display: flex;
     flex-direction: column;
+    /* border: 1px solid red; */
+}
+#weekday {
+    margin: 0 auto;
 }
 
 .api-data--container{
     display: flex;
     flex-direction: column;
+    /* border: 1px solid yellow; */
 }
+
 .temperature {
     font-size: 20px;
     font-weight: bold;
+    margin: 0 auto;
+}
+.section-sunTime {
+    display: flex;
+    flex-direction: row;
 }
 img{
     width: 100px;
