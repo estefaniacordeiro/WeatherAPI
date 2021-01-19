@@ -16,7 +16,7 @@ body {
 .searchbar{
     display: flex;
     flex-direction: column;
-    width: 50%;
+    width: 80%;
     text-align: center;
     margin-left: auto;
     margin-right: auto;
@@ -25,6 +25,31 @@ body {
     border-radius: 5px;
     height: 30px;
     font-size: large;
+}
+.label-city {
+    font-size: 26px;
+    font-weight: bold;
+}
+.input-city {
+    height: 50px;
+    padding: 5px;
+}
+.input-city:focus {
+    outline: none;
+    border:none;
+    box-shadow: 0 0 10px;
+}
+.sendBtn {
+    border: none;
+    border-radius: 5px;
+    background-color: white;
+    margin: 0 auto;
+    padding: 5px;
+    box-shadow: none;
+}
+.sendBtn:focus {
+    outline: none;
+    box-shadow: 0 0 10px;
 }
 
 .date--container{
