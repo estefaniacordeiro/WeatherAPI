@@ -6,6 +6,7 @@ loadInitialDom();
 let $sendButton = $('#sendBtn').on('click', insertCity);
 
 function loadInitialDom() {
+    let $body = $("body");
     let $sectionLocation = $('<section id="location-searchbar" class="searchbar"></section>');
     let $labelCity = $(`<label for="location" class="label-city"></label>`);
     let $inputCity = $(`<input type="text" id="city" class="input-city" onfocus="this.value=''" value="Insert a city">`);
@@ -16,7 +17,7 @@ function loadInitialDom() {
     let $fullDate = $(`<time id="full-date" class="date"></time>`);
     let $sectionData = $('<section class="api-data--container"></section>');
     let $temperature = $(`<section class="temperature" id="temperature"></section>`);
-    let $icons = $(`<section id="icon-location"></section>`);
+    let $icon = $(`<section id="icon-location"></section>`);
     let $sectionSunTime = $('<section id="section-sunTime" class="section-sunTime"></section>');
     let $sunriseTime = $(`<section id="sunrise-time"></section>`);
     let $sunsetTime = $(`<section id="sunset-time"></section>`);
@@ -28,7 +29,7 @@ function loadInitialDom() {
     $sectionDate.append($dateWeek, $fullDate);
     $sectionSunTime.append($sunriseTime, $sunsetTime);
     $sectionData.append($temperature, $sectionSunTime, $windIcon);
-    $labelCity.prepend($icons)
+    $body.prepend($icon)
 }
 
 function insertCity() {
@@ -80,7 +81,7 @@ function printTemperatureCity(responseInfoCity) {
 function dataUse(response){
     renderTimes(response)
     renderDayAndDate()
-    setIcons(response, $icon)
+    setIcons(response)
 }
 
 function formatTimes(date){
@@ -153,11 +154,10 @@ function setIcons(response){
             if(response.weather[0].id === 800){
                 iconLocation.html(`
                 <img src="assets/svg/sun.svg" alt="sunny day">`);
-
             }
             else {
                 iconLocation.html(`
-            <img src="assets/svg/cloudy.svg" alt="cloudy day"></img>`)
+                <img src="assets/svg/cloudy.svg" alt="cloudy">`)
             }
             
             break;
