@@ -28,7 +28,7 @@ function insertCity() {
     };
 
     $.ajax(requestGetInfoCity).done(function (responseInfoCity) {
-        console.log(responseInfoCity);
+        console.log(responseInfoCity)
         printNameCity(responseInfoCity);
         loadTotalDom();
         dataUse(responseInfoCity)
@@ -51,18 +51,19 @@ function printNameCity(res) {
 
 function loadTotalDom() {
     let $sectionDate = $('<section class="date--container"></section>');
-    let $dateWeek = $(`<time id="weekday" class="date">Monday</time>`);
-    let $fullDate = $(`<time id="full-date" class="date">18/01/2021</time>`);
+    let $dateWeek = $(`<time id="weekday" class="date"></time>`);
+    let $fullDate = $(`<time id="full-date" class="date"></time>`);
     let $sectionData = $('<section class="api-data--container"></section>');
     let $temperature = $(`<section class="temperature" id="temperature"></section>`);
-    let $icons = $(`<section id="state-icons">s</section>`);
-    let $sunriseTime = $(`<section id="sunrise-time">s</section>`);
-    let $sunsetTime = $(`<section id="sunset-time">s</section>`);
-    let $windIcon = $(`<section id="wind-icons">s</section>`);
+    let $icons = $(`<section id="icon-location"></section>`);
+    let $sunriseTime = $(`<section id="sunrise-time"></section>`);
+    let $sunsetTime = $(`<section id="sunset-time"></section>`);
+    let $windIcon = $(`<section id="wind-icons"></section>`);
     $('body').append($sectionDate);
     $('body').append($sectionData);
     $sectionDate.append($dateWeek, $fullDate);
-    $sectionData.append($temperature, $icons, $sunriseTime, $sunsetTime, $windIcon);
+    $sectionData.append($temperature, $sunriseTime, $sunsetTime, $windIcon);
+    $(".label-city").prepend($icons)
 }
 
 function printTemperatureCity(responseInfoCity) {
@@ -70,9 +71,11 @@ function printTemperatureCity(responseInfoCity) {
 }
 
 /*--------------------------Función para trabajar con los datos de la petición-------------------------------------*/
+let $icon = $("#icon-location")
 function dataUse(response){
     renderTimes(response)
     renderDayAndDate()
+    setIcons(response, $icon)
 }
 
 function formatTimes(date){
@@ -117,3 +120,44 @@ function renderDayAndDate(){
     $("#weekday").html(weekday)
     $("#full-date").html(fullDate)
 }
+
+function setIcons(response){
+    let weatherCode = response.weather[0].id.toString()[0]
+    let iconLocation = $("#icon-location")
+    
+    switch(weatherCode){
+        case "2":
+            iconLocation.html(`
+            <img src="assets/svg/heavy-rain.svg"`);
+            break;
+        case "3":
+            iconLocation.html(`
+            <img src="assets/svg/rain.svg"`);
+            break;
+        case "5":
+            iconLocation.html(`
+            <img src="assets/svg/weather.svg"`);
+            break;
+        case "6":
+            iconLocation.html(`
+            <img src="assets/svg/snow.svg"`);
+            break;
+        case "7":
+            break;
+        case "8":
+            if(response.weather[0].id === 800){
+                iconLocation.html(`
+                <img src="assets/svg/sun.svg" alt="sunny day">`);
+
+            }
+            else {
+                iconLocation.html(`
+            <img src="assets/svg/cloudy.svg" alt="cloudy day"></img>`)
+            }
+            
+            break;
+        
+    }
+}
+
+
