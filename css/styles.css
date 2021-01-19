@@ -59,7 +59,11 @@ body {
 
 .api-data--container{
     display: flex;
-    flex-direction: row wrap;
+    flex-direction: column;
+}
+.temperature {
+    font-size: 20px;
+    font-weight: bold;
 }
 img{
     width: 100px;

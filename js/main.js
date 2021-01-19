@@ -28,8 +28,13 @@ function insertCity() {
     };
 
     $.ajax(requestGetInfoCity).done(function (responseInfoCity) {
+        console.log(responseInfoCity);
         printNameCity(responseInfoCity);
+        loadTotalDom();
+        /* dataUse(responseInfoCity); */
+        printTemperatureCity(responseInfoCity);
     });
+};
 
 function errorNotFound() {
     $('.error-message').text('This city doesn´t exist!').show();
@@ -44,37 +49,56 @@ function printNameCity(responseInfoCity) {
     $('.label-city').text(responseInfoCity.name);
 }
 
+function loadTotalDom() {
+    let $sectionDate = $('<section class="date--container"></section>');
+    let $dateWeek = $(`<time id="weekday" class="date">Monday</time>`);
+    let $fullDate = $(`<time id="full-date" class="date">18/01/2021</time>`);
+    let $sectionData = $('<section class="api-data--container"></section>');
+    let $temperature = $(`<section class="temperature" id="temperature"></section>`);
+    let $icons = $(`<section id="state-icons">s</section>`);
+    let $sunriseTime = $(`<section id="sunrise-time">s</section>`);
+    let $sunsetTime = $(`<section id="sunset-time">s</section>`);
+    let $windIcon = $(`<section id="wind-icons">s</section>`);
+    $('body').append($sectionDate);
+    $('body').append($sectionData);
+    $sectionDate.append($dateWeek, $fullDate);
+    $sectionData.append($temperature, $icons, $sunriseTime, $sunsetTime, $windIcon);
+}
+
+function printTemperatureCity(responseInfoCity) {
+    $('#temperature').html(Math.round(responseInfoCity.main.temp) + ' °C');
+}
+
 /*--------------------------Función para trabajar con los datos de la petición-------------------------------------*/
-function dataUse(response){
-    let sunriseTime = new Date(response.sys.sunrise * 1000)
-    let sunsetTime = new Date(response.sys.sunset * 1000)
-    
-    let $sunrise = $("#sunrise-time") 
-    let $sunset = $("#sunset-time")
+/* function dataUse(responseInfoCity){
+    let sunriseTime = new Date(responseInfoCity.sys.sunrise * 1000);
+    let sunsetTime = new Date(responseInfoCity.sys.sunset * 1000);
+
+    let $sunrise = $("#sunrise-time");
+    let $sunset = $("#sunset-time");
 
     $sunrise.html(
         `<h4>SUNRISE TIME</h4>
-        <p>${formatDate(sunriseTime)}</p>`)
+        <p>${formatDate(sunriseTime)}</p>`);
     $sunset.html(
         `<h4>SUNSET TIME</h4>
-        <p>${formatDate(sunsetTime)}</p>`)
+        <p>${formatDate(sunsetTime)}</p>`);
 }
 function formatDate(date){
-    
-    let h = date.getHours()
-    let min = date.getMinutes()
-    let s = date.getSeconds()
+    let h = date.getHours();
+    let min = date.getMinutes();
+    let s = date.getSeconds();
     if(min<10){min = '0' + min}
     if(s<10){s = '0' + s}
 
-    let returnTime = `<p>${h}:${min}:${s}</p>`
-    return returnTime
-}
+    let returnTime = `<p>${h}:${min}:${s}</p>`;
+    return returnTime;
+} */
 
 /*
 let y = date.getFullYear()
 let m = date.getMonth() + 1
 let d = date.getDate()
-if (d<9){d = '0'+ d} 
-if (m<9){m = '0'+ m} 
+if (d<9){d = '0'+ d}
+if (m<9){m = '0'+ m}
 */
