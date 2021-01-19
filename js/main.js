@@ -15,7 +15,6 @@ function loadInitialDom() {
 }
 
 function insertCity() {
-    /* $('#sendBtn').off('click', insertCity); */ /* No funciona */
     let $city = $('#city').val();
     $('#city')[0].value = '';
 
@@ -28,19 +27,17 @@ function insertCity() {
         }
     };
     $.ajax(requestGetInfoCity).done(function (responseInfoCity) {
-        /* console.log(responseInfoCity); */
         printNameCity(responseInfoCity);
     });
 }
 
 function errorNotFound() {
-    /* alert('This city doesn`t exist!'); */ /* Option 1 */
-    $('.error-message').text('This city doesn´t exist!').show(); /* Option 2 */
+    $('.error-message').text('This city doesn´t exist!').show();
     console.log($('.label-city'));
     $('.label-city')[0].textContent ='';
     $('#city').on('click', function() {
         $('.error-message').hide('slow');
-    });
+    });cd
 }
 
 function printNameCity(responseInfoCity) {

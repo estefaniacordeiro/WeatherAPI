@@ -45,13 +45,11 @@ body {
     background-color: white;
     margin: 0 auto;
     padding: 5px;
-    /* box-shadow: 0 0 10px; */ /* Option 1 */
-    box-shadow: none; /* Option 2 */
+    box-shadow: none;
 }
 .sendBtn:focus {
     outline: none;
-    /* box-shadow: none; */ /* Option 1 */
-    box-shadow: 0 0 10px; /* Option 2 */
+    box-shadow: 0 0 10px;
 }
 
 .date--container{
