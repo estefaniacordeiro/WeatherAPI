@@ -2,6 +2,7 @@
 
 loadInitialDom();
 
+
 let $sendButton = $('#sendBtn').on('click', insertCity);
 
 function loadInitialDom() {
@@ -10,8 +11,23 @@ function loadInitialDom() {
     let $inputCity = $(`<input type="text" id="city" class="input-city" onfocus="this.value=''" value="Insert a city">`);
     const $buttonSend = $('<button id="sendBtn" class="sendBtn">Search</button>');
     const $sectionMessageError = $('<section class="error-message"></section>');
+    let $sectionDate = $('<section class="date--container"></section>');
+    let $dateWeek = $(`<time id="weekday" class="date"></time>`);
+    let $fullDate = $(`<time id="full-date" class="date"></time>`);
+    let $sectionData = $('<section class="api-data--container"></section>');
+    let $temperature = $(`<section class="temperature" id="temperature"></section>`);
+    let $icons = $(`<section id="state-icons"></section>`);
+    let $sectionSunTime = $('<section id="section-sunTime" class="section-sunTime"></section>');
+    let $sunriseTime = $(`<section id="sunrise-time"></section>`);
+    let $sunsetTime = $(`<section id="sunset-time"></section>`);
+    let $windIcon = $(`<section id="wind-icons"></section>`);
     $('body').append($sectionLocation);
     $sectionLocation.append($labelCity, $inputCity, $buttonSend, $sectionMessageError);
+    $('body').append($sectionDate);
+    $('body').append($sectionData);
+    $sectionDate.append($dateWeek, $fullDate);
+    $sectionSunTime.append($sunriseTime, $sunsetTime);
+    $sectionData.append($temperature, $icons, $sectionSunTime, $windIcon);
 }
 
 function insertCity() {
@@ -28,10 +44,9 @@ function insertCity() {
     };
 
     $.ajax(requestGetInfoCity).done(function (responseInfoCity) {
-        console.log(responseInfoCity);
+        /* console.log(responseInfoCity); */
         printNameCity(responseInfoCity);
-        loadTotalDom();
-        dataUse(responseInfoCity)
+        dataUse(responseInfoCity);
         printTemperatureCity(responseInfoCity);
     });
 };
@@ -43,77 +58,68 @@ function errorNotFound() {
     $('#city').on('click', function() {
         $('.error-message').hide('slow');
     });
+    $('#weekday')[0].textContent = '';
+    $('#full-date')[0].textContent = '';
+    $('#temperature')[0].textContent = '';
+    $('#state-icons')[0].textContent = '';
+    $('#sunrise-time')[0].textContent = '';
+    $('#sunset-time')[0].textContent = '';
+    $('#wind-icons')[0].textContent = '';
 }
 
 function printNameCity(res) {
     $('.label-city').text(res.name);
 }
 
-function loadTotalDom() {
-    let $sectionDate = $('<section class="date--container"></section>');
-    let $dateWeek = $(`<time id="weekday" class="date">Monday</time>`);
-    let $fullDate = $(`<time id="full-date" class="date">18/01/2021</time>`);
-    let $sectionData = $('<section class="api-data--container"></section>');
-    let $temperature = $(`<section class="temperature" id="temperature"></section>`);
-    let $icons = $(`<section id="state-icons">s</section>`);
-    let $sunriseTime = $(`<section id="sunrise-time">s</section>`);
-    let $sunsetTime = $(`<section id="sunset-time">s</section>`);
-    let $windIcon = $(`<section id="wind-icons">s</section>`);
-    $('body').append($sectionDate);
-    $('body').append($sectionData);
-    $sectionDate.append($dateWeek, $fullDate);
-    $sectionData.append($temperature, $icons, $sunriseTime, $sunsetTime, $windIcon);
-}
-
 function printTemperatureCity(responseInfoCity) {
     $('#temperature').html(Math.round(responseInfoCity.main.temp) + ' °C');
 }
 
-/*--------------------------Función para trabajar con los datos de la petición-------------------------------------*/
+/*-----Función para trabajar con los datos de la petición-----*/
 function dataUse(response){
-    renderTimes(response)
-    renderDayAndDate()
+    renderTimes(response);
+    renderDayAndDate();
 }
 
 function formatTimes(date){
-    let h = date.getHours()
-    let min = date.getMinutes()
-    let s = date.getSeconds()
-    if(min<10){min = '0' + min}
-    if(s<10){s = '0' + s}
+    let h = date.getHours();
+    let min = date.getMinutes();
+    let s = date.getSeconds();
+    if(min<10){min = '0' + min};
+    if(s<10){s = '0' + s};
 
-    let returnTime = `<p>${h}:${min}:${s}</p>`;
+    let returnTime = `${h}:${min}:${s}`;
     return returnTime;
 }
 
 function renderTimes(response){
-    let $sunrise = $("#sunrise-time") 
-    let $sunset = $("#sunset-time")
+    let $sunrise = $("#sunrise-time");
+    let $sunset = $("#sunset-time");
 
-    let sunriseTime = new Date(response.sys.sunrise * 1000)
-    let sunsetTime = new Date(response.sys.sunset * 1000)
+    let sunriseTime = new Date(response.sys.sunrise * 1000);
+    let sunsetTime = new Date(response.sys.sunset * 1000);
 
     $sunrise.html(
         `<h4>SUNRISE TIME</h4>
-        <p>${formatTimes(sunriseTime)}</p>`)
+        <p>${formatTimes(sunriseTime)}</p>`);
     $sunset.html(
         `<h4>SUNSET TIME</h4>
-        <p>${formatTimes(sunsetTime)}</p>`)
+        <p>${formatTimes(sunsetTime)}</p>`);
 }
 
 function renderDayAndDate(){
-    let today = new Date()
+    let today = new Date();
 
-    let y = today.getFullYear()
-    let m = today.getMonth() + 1
-    let d = today.getDate()
-    if (d<9){d = '0'+ d} 
-    if (m<9){m = '0'+ m}
+    let y = today.getFullYear();
+    let m = today.getMonth() + 1;
+    let d = today.getDate();
+    if (d<9){d = '0'+ d};
+    if (m<9){m = '0'+ m};
 
-    let daysArray = ["Monday", "Tuesday", "Wednesay", "Thursday", "Friday", "Saturday", "Sunday"]
-    let weekday = daysArray[today.getDay() - 1]
-    let fullDate = `${d}/${m}/${y}`
-    
-    $("#weekday").html(weekday)
-    $("#full-date").html(fullDate)
+    let daysArray = ["Monday", "Tuesday", "Wednesay", "Thursday", "Friday", "Saturday", "Sunday"];
+    let weekday = daysArray[today.getDay() - 1];
+    let fullDate = `${d}/${m}/${y}`;
+
+    $("#weekday").html(weekday);
+    $("#full-date").html(fullDate);
 }
