@@ -16,7 +16,7 @@ function loadInitialDom() {
     let $fullDate = $(`<time id="full-date" class="date"></time>`);
     let $sectionData = $('<section class="api-data--container"></section>');
     let $temperature = $(`<section class="temperature" id="temperature"></section>`);
-    let $icons = $(`<section id="state-icons"></section>`);
+    let $icons = $(`<section id="icon-location"></section>`);
     let $sectionSunTime = $('<section id="section-sunTime" class="section-sunTime"></section>');
     let $sunriseTime = $(`<section id="sunrise-time"></section>`);
     let $sunsetTime = $(`<section id="sunset-time"></section>`);
@@ -27,7 +27,8 @@ function loadInitialDom() {
     $('body').append($sectionData);
     $sectionDate.append($dateWeek, $fullDate);
     $sectionSunTime.append($sunriseTime, $sunsetTime);
-    $sectionData.append($temperature, $icons, $sectionSunTime, $windIcon);
+    $sectionData.append($temperature, $sectionSunTime, $windIcon);
+    $labelCity.prepend($icons)
 }
 
 function insertCity() {
@@ -75,10 +76,11 @@ function printTemperatureCity(responseInfoCity) {
     $('#temperature').html(Math.round(responseInfoCity.main.temp) + ' °C');
 }
 
-/*-----Función para trabajar con los datos de la petición-----*/
+/*--------------------------Función para trabajar con los datos de la petición-------------------------------------*/
 function dataUse(response){
-    renderTimes(response);
-    renderDayAndDate();
+    renderTimes(response)
+    renderDayAndDate()
+    setIcons(response, $icon)
 }
 
 function formatTimes(date){
@@ -123,3 +125,44 @@ function renderDayAndDate(){
     $("#weekday").html(weekday);
     $("#full-date").html(fullDate);
 }
+
+function setIcons(response){
+    let weatherCode = response.weather[0].id.toString()[0]
+    let iconLocation = $("#icon-location")
+    
+    switch(weatherCode){
+        case "2":
+            iconLocation.html(`
+            <img src="assets/svg/heavy-rain.svg"`);
+            break;
+        case "3":
+            iconLocation.html(`
+            <img src="assets/svg/rain.svg"`);
+            break;
+        case "5":
+            iconLocation.html(`
+            <img src="assets/svg/weather.svg"`);
+            break;
+        case "6":
+            iconLocation.html(`
+            <img src="assets/svg/snow.svg"`);
+            break;
+        case "7":
+            break;
+        case "8":
+            if(response.weather[0].id === 800){
+                iconLocation.html(`
+                <img src="assets/svg/sun.svg" alt="sunny day">`);
+
+            }
+            else {
+                iconLocation.html(`
+            <img src="assets/svg/cloudy.svg" alt="cloudy day"></img>`)
+            }
+            
+            break;
+        
+    }
+}
+
+
