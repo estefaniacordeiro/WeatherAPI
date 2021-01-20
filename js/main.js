@@ -54,6 +54,7 @@ function insertCity() {
         printNameCity(responseInfoCity);
         dataUse(responseInfoCity);
         printTemperatureCity(responseInfoCity);
+        changeRangeColorsTemperature(responseInfoCity);
     });
 };
 
@@ -197,4 +198,17 @@ function setIcons(response){
     }
 }
 
-
+function changeRangeColorsTemperature(responseInfoCity) {
+    let $temperatureOfColor = responseInfoCity.main.temp;
+    if($temperatureOfColor >= 30) {
+        $('body').css("background-image", "linear-gradient(rgb(173, 106, 106), rgb(197, 2, 2))");
+    } else if(20 <= $temperatureOfColor && $temperatureOfColor < 30 ) {
+        $('body').css("background-image", "linear-gradient(rgb(207, 155, 113), rgb(226, 110, 2))");
+    } else if(10 <= $temperatureOfColor && $temperatureOfColor < 20 ) {
+        $('body').css("background-image", "linear-gradient(rgb(143, 226, 143), rgb(38, 160, 2)");
+    } else if(0 <= $temperatureOfColor && $temperatureOfColor < 10 ) {
+        $('body').css("background-image", "linear-gradient(rgb(134, 179, 216), rgb(2, 97, 160))");
+    } else {
+        $('body').css("background-image", "linear-gradient(rgb(197, 197, 197), rgb(255, 255, 255))");
+    }
+}
