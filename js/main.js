@@ -22,6 +22,7 @@ function loadInitialDom() {
     let $sunriseTime = $(`<section id="sunrise-time"></section>`);
     let $sunsetTime = $(`<section id="sunset-time"></section>`);
     let $windIcon = $(`<section id="wind-icons"></section>`);
+    $body.append($icon);
     $('body').append($sectionLocation);
     $sectionLocation.append($labelCity, $inputCity, $buttonSend, $sectionMessageError);
     $('body').append($sectionDate);
@@ -29,7 +30,7 @@ function loadInitialDom() {
     $sectionDate.append($dateWeek, $fullDate);
     $sectionSunTime.append($sunriseTime, $sunsetTime);
     $sectionData.append($temperature, $sectionSunTime, $windIcon);
-    $body.prepend($icon)
+    /* $body.prepend($icon) */
 }
 
 function insertCity() {
@@ -50,27 +51,26 @@ function insertCity() {
         printNameCity(responseInfoCity);
         dataUse(responseInfoCity);
         printTemperatureCity(responseInfoCity);
+        changeRangeColorsTemperature(responseInfoCity);
     });
 };
 
 function errorNotFound() {
     $('.error-message').text('This city doesn´t exist!').show();
-    console.log($('.label-city'));
     $('.label-city')[0].textContent ='';
     $('#city').on('click', function() {
         $('.error-message').hide('slow');
     });
+    $('#icon-location')[0].innerHTML = '';
     $('#weekday')[0].textContent = '';
     $('#full-date')[0].textContent = '';
     $('#temperature')[0].textContent = '';
-    $('#state-icons')[0].textContent = '';
-    $('#sunrise-time')[0].textContent = '';
-    $('#sunset-time')[0].textContent = '';
+    $('#section-sunTime')[0].textContent = '';
     $('#wind-icons')[0].textContent = '';
 }
 
-function printNameCity(res) {
-    $('.label-city').text(res.name);
+function printNameCity(responseInfoCity) {
+    $('.label-city').text(responseInfoCity.name);
 }
 
 function printTemperatureCity(responseInfoCity) {
@@ -130,7 +130,7 @@ function renderDayAndDate(){
 function setIcons(response){
     let weatherCode = response.weather[0].id.toString()[0]
     let iconLocation = $("#icon-location")
-    
+
     switch(weatherCode){
         case "2":
             iconLocation.html(`
@@ -159,10 +159,21 @@ function setIcons(response){
                 iconLocation.html(`
                 <img src="assets/svg/cloudy.svg" alt="cloudy">`)
             }
-            
             break;
-        
     }
 }
 
-
+function changeRangeColorsTemperature(responseInfoCity) {
+    let $temperatureOfColor = responseInfoCity.main.temp;
+    if($temperatureOfColor >= 30) {
+        $('body').css("background-image", "linear-gradient(rgb(173, 106, 106), rgb(197, 2, 2))");
+    } else if(20 <= $temperatureOfColor && $temperatureOfColor < 30 ) {
+        $('body').css("background-image", "linear-gradient(rgb(207, 155, 113), rgb(226, 110, 2))");
+    } else if(10 <= $temperatureOfColor && $temperatureOfColor < 20 ) {
+        $('body').css("background-image", "linear-gradient(rgb(143, 226, 143), rgb(38, 160, 2)");
+    } else if(0 <= $temperatureOfColor && $temperatureOfColor < 10 ) {
+        $('body').css("background-image", "linear-gradient(rgb(134, 179, 216), rgb(2, 97, 160))");
+    } else {
+        $('body').css("background-image", "linear-gradient(rgb(197, 197, 197), rgb(255, 255, 255))");
+    }
+}
