@@ -2,12 +2,8 @@
 
 loadInitialDom();
 
+
 let $sendButton = $('#sendBtn').on('click', insertCity);
-$("#city").keypress((e) => {
-    if(e.which === 13){
-        insertCity()
-    }
-})
 
 function loadInitialDom() {
     let $body = $("body");
@@ -25,15 +21,15 @@ function loadInitialDom() {
     let $sectionSunTime = $('<section id="section-sunTime" class="section-sunTime"></section>');
     let $sunriseTime = $(`<section id="sunrise-time"></section>`);
     let $sunsetTime = $(`<section id="sunset-time"></section>`);
-    let $windIcon = $(`<section id="wind-icons"></section>`);
-    $('body').append($sectionLocation);
+    let $windIcon = $(`<section id="wind-icons" class="wind-icons"></section>`);
+    $body.append($icon);
+    $body.append($sectionLocation);
     $sectionLocation.append($labelCity, $inputCity, $buttonSend, $sectionMessageError);
-    $('body').append($sectionDate);
-    $('body').append($sectionData);
+    $body.append($sectionDate);
+    $body.append($sectionData);
     $sectionDate.append($dateWeek, $fullDate);
     $sectionSunTime.append($sunriseTime, $sunsetTime);
     $sectionData.append($temperature, $sectionSunTime, $windIcon);
-    $body.prepend($icon)
 }
 
 function insertCity() {
@@ -50,32 +46,31 @@ function insertCity() {
     };
 
     $.ajax(requestGetInfoCity).done(function (responseInfoCity) {
-        console.log(responseInfoCity);
+        /* console.log(responseInfoCity); */
         printNameCity(responseInfoCity);
         dataUse(responseInfoCity);
         printTemperatureCity(responseInfoCity);
         changeRangeColorsTemperature(responseInfoCity);
+        printWind(responseInfoCity);
     });
 };
 
 function errorNotFound() {
     $('.error-message').text('This city doesn´t exist!').show();
-    console.log($('.label-city'));
     $('.label-city')[0].textContent ='';
     $('#city').on('click', function() {
         $('.error-message').hide('slow');
     });
+    $('#icon-location')[0].innerHTML = '';
     $('#weekday')[0].textContent = '';
     $('#full-date')[0].textContent = '';
     $('#temperature')[0].textContent = '';
-    $('#state-icons')[0].textContent = '';
-    $('#sunrise-time')[0].textContent = '';
-    $('#sunset-time')[0].textContent = '';
+    $('#section-sunTime')[0].textContent = '';
     $('#wind-icons')[0].textContent = '';
 }
 
-function printNameCity(res) {
-    $('.label-city').text(res.name);
+function printNameCity(responseInfoCity) {
+    $('.label-city').text(responseInfoCity.name);
 }
 
 function printTemperatureCity(responseInfoCity) {
@@ -124,7 +119,7 @@ function renderDayAndDate(){
     if (d<9){d = '0'+ d};
     if (m<9){m = '0'+ m};
 
-    let daysArray = ["Monday", "Tuesday", "Wednesay", "Thursday", "Friday", "Saturday", "Sunday"];
+    let daysArray = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
     let weekday = daysArray[today.getDay() - 1];
     let fullDate = `${d}/${m}/${y}`;
 
@@ -135,66 +130,36 @@ function renderDayAndDate(){
 function setIcons(response){
     let weatherCode = response.weather[0].id.toString()[0]
     let iconLocation = $("#icon-location")
-    let now = new Date().getTime();
-    console.log(now)
-    console.log(response.sys.sunset * 1000)
-    if(now > response.sys.sunset * 1000){
-        console.log("now")
-    } else {console.log("sunset")}
+
     switch(weatherCode){
         case "2":
             iconLocation.html(`
-            <img src="assets/svg/thunderstorm.svg" alt="thunderstorm">`);
+            <img src="assets/svg/heavy-rain.svg"`);
             break;
         case "3":
-                iconLocation.html(`
-                <img src="assets/svg/drizzle.svg" alt="drizzle">`);
+            iconLocation.html(`
+            <img src="assets/svg/rain.svg"`);
             break;
         case "5":
-            if(now < response.sys.sunset * 1000){
-                iconLocation.html(`
-                <img src="assets/svg/rainy-day.svg" alt="rainy day">`)
-                break
-            } else {
-                iconLocation.html(`
-                <img src="assets/svg/rainy-night.svg" alt="rainy night">`)
-                break
-            }
-        case "6":
-            if(now < response.sys.sunset * 1000){
-                iconLocation.html(`
-                <img src="assets/svg/snowy-day.svg" alt="snow day">`)
-                break
-            } else {
-                iconLocation.html(`
-                <img src="assets/svg/snow-night.svg" alt="snow night">`)
-                break
-            }
-        case "7":
             iconLocation.html(`
-            <img src="assets/svg/fog.svg" alt="mist">`)
+            <img src="assets/svg/weather.svg"`);
+            break;
+        case "6":
+            iconLocation.html(`
+            <img src="assets/svg/snow.svg"`);
+            break;
+        case "7":
             break;
         case "8":
             if(response.weather[0].id === 800){
-                if(now < response.sys.sunset * 1000){
-                    iconLocation.html(`
-                    <img src="assets/svg/sun.svg" alt="sunny day">`)
-                    break
-                } else {
-                    iconLocation.html(`
-                    <img src="assets/svg/moon.svg" alt="clear night">`)
-                    break
-                }}
+                iconLocation.html(`
+                <img src="assets/svg/sun.svg" alt="sunny day">`);
+            }
             else {
-                if(now < response.sys.sunset * 1000){
-                    iconLocation.html(`
-                    <img src="assets/svg/cloudy.svg" alt="cloudy day">`)
-                    break
-                } else {
-                    iconLocation.html(`
-                    <img src="assets/svg/cloudy-night.svg" alt="cloudy night">`)
-                    break
-                }}
+                iconLocation.html(`
+                <img src="assets/svg/cloudy.svg" alt="cloudy">`)
+            }
+            break;
     }
 }
 
@@ -209,6 +174,20 @@ function changeRangeColorsTemperature(responseInfoCity) {
     } else if(0 <= $temperatureOfColor && $temperatureOfColor < 10 ) {
         $('body').css("background-image", "linear-gradient(rgb(134, 179, 216), rgb(2, 97, 160))");
     } else {
-        $('body').css("background-image", "linear-gradient(rgb(197, 197, 197), rgb(255, 255, 255))");
+        $('body').css("background-image", "linear-gradient(rgb(202, 199, 199), rgb(124, 124, 124))");
     }
+}
+
+function printWind(responseInfoCity) {
+    let $directionWind = responseInfoCity.wind.deg;
+    let $speedWind = Math.round(responseInfoCity.wind.speed);
+    $('#wind-icons').html(`
+    <section class="title-wind">
+        <h4>WIND</h4>
+    </section>
+    <section id="section-param-wind" class="section-param-wind">
+        <img class="direction-wind" src="assets/svg/arrow.svg" alt="Wind direction">
+        <p class="speed-wind">${$speedWind} m/s</p>
+    </section>`);
+    $('.direction-wind').css('transform', `rotate(${$directionWind}deg)`);
 }
