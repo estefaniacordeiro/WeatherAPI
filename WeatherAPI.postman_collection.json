@@ -1,0 +1,82 @@
+{
+	"info": {
+		"_postman_id": "832926f9-c367-4a93-98b4-9c0ba437081d",
+		"name": "WeatherAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET current weather of a city",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "api.openweathermap.org/data/2.5/weather?q=Vigo&appid={{APIkey weather}}&units=metric&lang=en",
+					"host": [
+						"api",
+						"openweathermap",
+						"org"
+					],
+					"path": [
+						"data",
+						"2.5",
+						"weather"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "Vigo"
+						},
+						{
+							"key": "appid",
+							"value": "{{APIkey weather}}"
+						},
+						{
+							"key": "units",
+							"value": "metric",
+							"description": "Units of the response parameters: \nmain.temp, main.feels_like, main.temp_min, main.temp_max [ªC]\nhumidity, clouds.all [%]\nmain.pressure, main.sea_level, main.grnd_level [hPa]\nwind.speed, wind.gust [meter/sec]\nwind.deg [degrees]\nrain.1h, rain.3h [mm]"
+						},
+						{
+							"key": "lang",
+							"value": "en"
+						}
+					]
+				},
+				"description": "Introduce a name of the city and response is the current weather with its parameters (coord, weather, base, main, wind, clouds, rain, snow, dt, sys, timezone, id, name and cod)"
+			},
+			"response": []
+		},
+		{
+			"name": "GET if  name of city no exist ! ",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "api.openweathermap.org/data/2.5/weather?q=sdflkjsdf&appid={{APIkey weather}}",
+					"host": [
+						"api",
+						"openweathermap",
+						"org"
+					],
+					"path": [
+						"data",
+						"2.5",
+						"weather"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "sdflkjsdf"
+						},
+						{
+							"key": "appid",
+							"value": "{{APIkey weather}}"
+						}
+					]
+				},
+				"description": "Response: ERROR 404 Not found!"
+			},
+			"response": []
+		}
+	]
+}
