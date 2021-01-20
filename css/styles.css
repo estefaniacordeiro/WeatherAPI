@@ -14,6 +14,9 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: white;
 }
+.icon-location {
+    margin-top: 40px;
+}
 .searchbar{
     display: flex;
     flex-direction: column;

@@ -2,8 +2,12 @@
 
 loadInitialDom();
 
-
 let $sendButton = $('#sendBtn').on('click', insertCity);
+$("#city").keypress((e) => {
+    if(e.which === 13){
+        insertCity()
+    }
+})
 
 function loadInitialDom() {
     let $body = $("body");
@@ -17,12 +21,11 @@ function loadInitialDom() {
     let $fullDate = $(`<time id="full-date" class="date"></time>`);
     let $sectionData = $('<section class="api-data--container"></section>');
     let $temperature = $(`<section class="temperature" id="temperature"></section>`);
-    let $icon = $(`<section id="icon-location"></section>`);
+    let $icon = $(`<section id="icon-location" class="icon-location"></section>`);
     let $sectionSunTime = $('<section id="section-sunTime" class="section-sunTime"></section>');
     let $sunriseTime = $(`<section id="sunrise-time"></section>`);
     let $sunsetTime = $(`<section id="sunset-time"></section>`);
     let $windIcon = $(`<section id="wind-icons" class="wind-icons"></section>`);
-    $body.append($icon);
     $body.append($sectionLocation);
     $sectionLocation.append($labelCity, $inputCity, $buttonSend, $sectionMessageError);
     $body.append($sectionDate);
@@ -30,6 +33,7 @@ function loadInitialDom() {
     $sectionDate.append($dateWeek, $fullDate);
     $sectionSunTime.append($sunriseTime, $sunsetTime);
     $sectionData.append($temperature, $sectionSunTime, $windIcon);
+    $body.prepend($icon)
 }
 
 function insertCity() {
@@ -46,7 +50,6 @@ function insertCity() {
     };
 
     $.ajax(requestGetInfoCity).done(function (responseInfoCity) {
-        /* console.log(responseInfoCity); */
         printNameCity(responseInfoCity);
         dataUse(responseInfoCity);
         printTemperatureCity(responseInfoCity);
@@ -65,7 +68,8 @@ function errorNotFound() {
     $('#weekday')[0].textContent = '';
     $('#full-date')[0].textContent = '';
     $('#temperature')[0].textContent = '';
-    $('#section-sunTime')[0].textContent = '';
+    $('#sunrise-time')[0].textContent = '';
+    $('#sunset-time')[0].textContent = '';
     $('#wind-icons')[0].textContent = '';
 }
 
@@ -77,11 +81,12 @@ function printTemperatureCity(responseInfoCity) {
     $('#temperature').html(Math.round(responseInfoCity.main.temp) + ' °C');
 }
 
-/*--------------------------Función para trabajar con los datos de la petición-------------------------------------*/
+/*------Función para trabajar con los datos de la petición--------*/
+
 function dataUse(response){
-    renderTimes(response)
-    renderDayAndDate()
-    setIcons(response)
+    renderTimes(response);
+    renderDayAndDate();
+    setIcons(response);
 }
 
 function formatTimes(date){
@@ -96,6 +101,7 @@ function formatTimes(date){
 }
 
 function renderTimes(response){
+    console.log('hola');
     let $sunrise = $("#sunrise-time");
     let $sunset = $("#sunset-time");
 
@@ -108,6 +114,8 @@ function renderTimes(response){
     $sunset.html(
         `<h4>SUNSET TIME</h4>
         <p>${formatTimes(sunsetTime)}</p>`);
+
+    console.log($('#sunrise-time'));
 }
 
 function renderDayAndDate(){
@@ -130,36 +138,63 @@ function renderDayAndDate(){
 function setIcons(response){
     let weatherCode = response.weather[0].id.toString()[0]
     let iconLocation = $("#icon-location")
-
+    let now = new Date().getTime();
     switch(weatherCode){
         case "2":
             iconLocation.html(`
-            <img src="assets/svg/heavy-rain.svg"`);
+            <img src="assets/svg/thunderstorm.svg" alt="thunderstorm">`);
             break;
         case "3":
-            iconLocation.html(`
-            <img src="assets/svg/rain.svg"`);
+                iconLocation.html(`
+                <img src="assets/svg/drizzle.svg" alt="drizzle">`);
             break;
         case "5":
-            iconLocation.html(`
-            <img src="assets/svg/weather.svg"`);
-            break;
+            if(now < response.sys.sunset * 1000){
+                iconLocation.html(`
+                <img src="assets/svg/rainy-day.svg" alt="rainy day">`)
+                break
+            } else {
+                iconLocation.html(`
+                <img src="assets/svg/rainy-night.svg" alt="rainy night">`)
+                break
+            }
         case "6":
-            iconLocation.html(`
-            <img src="assets/svg/snow.svg"`);
-            break;
+            if(now < response.sys.sunset * 1000){
+                iconLocation.html(`
+                <img src="assets/svg/snowy-day.svg" alt="snow day">`)
+                break
+            } else {
+                iconLocation.html(`
+                <img src="assets/svg/snow-night.svg" alt="snow night">`)
+                break
+            }
         case "7":
+            iconLocation.html(`
+            <img src="assets/svg/fog.svg" alt="mist">`)
             break;
         case "8":
             if(response.weather[0].id === 800){
-                iconLocation.html(`
-                <img src="assets/svg/sun.svg" alt="sunny day">`);
+                if(now < response.sys.sunset * 1000){
+                    iconLocation.html(`
+                    <img src="assets/svg/sun.svg" alt="sunny day">`)
+                    break
+                } else {
+                    iconLocation.html(`
+                    <img src="assets/svg/moon.svg" alt="clear night">`)
+                    break
+                }
             }
             else {
-                iconLocation.html(`
-                <img src="assets/svg/cloudy.svg" alt="cloudy">`)
+                if(now < response.sys.sunset * 1000){
+                    iconLocation.html(`
+                    <img src="assets/svg/cloudy.svg" alt="cloudy day">`)
+                    break
+                } else {
+                    iconLocation.html(`
+                    <img src="assets/svg/cloudy-night.svg" alt="cloudy night">`)
+                    break
+                }
             }
-            break;
     }
 }
 
