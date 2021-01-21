@@ -2,6 +2,7 @@
     box-sizing: border-box;
     margin: 10px;
     padding: 0;
+    
 }
 body {
     height: 100vh;
@@ -13,6 +14,10 @@ body {
     background-image: linear-gradient(rgb(149, 125, 163), rgb(107, 59, 163));
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: white;
+}
+.time{
+    margin: 0px;
+    font-size: 40px;
 }
 .searchbar{
     display: flex;
@@ -28,8 +33,8 @@ body {
     font-size: large;
 }
 .label-city {
-    font-size: 26px;
-    font-weight: bold;
+    font-size: 20px;
+    
 }
 .input-city {
     height: 50px;

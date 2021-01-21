@@ -20,8 +20,10 @@ function loadInitialDom() {
     let $dateWeek = $(`<time id="weekday" class="date"></time>`);
     let $fullDate = $(`<time id="full-date" class="date"></time>`);
     let $sectionData = $('<section class="api-data--container"></section>');
-    let $temperature = $(`<section class="temperature" id="temperature"></section>`);
-    let $icon = $(`<section id="icon-location"></section>`);
+    let $temperature = $(`<section class="temperature" id="temperature"></section>
+                          <section id="weather-type"></section>`);
+    let $icon = $(`<section id="icon-location"></section>
+                   <section id="current-time" class="time"></section>`);
     let $sectionSunTime = $('<section id="section-sunTime" class="section-sunTime"></section>');
     let $sunriseTime = $(`<section id="sunrise-time"></section>`);
     let $sunsetTime = $(`<section id="sunset-time"></section>`);
@@ -34,7 +36,27 @@ function loadInitialDom() {
     $sectionSunTime.append($sunriseTime, $sunsetTime);
     $sectionData.append($temperature, $sectionSunTime, $windIcon);
     $body.prepend($icon)
+    let $currentTime = $()
+    $icon.append($currentTime)
 }
+
+/*function loadDom(){
+    let $body = $('body')
+    $body.html(`
+    <section id="main--container">
+        <section class="label-city"></section>
+        <section id="icon-location"></section>
+        <section class="temperature" id="temperature"></section>
+        <section id="weather-type"></section>
+        <section id="location-searchbar" class="searchbar">
+            <input type="text" id="city" class="input-city" onfocus="this.value=''" value="Insert a city">
+            <button id="sendBtn" class="sendBtn">Search</button>
+            <section class="error-message"></section>
+        </section>
+    </section>
+    
+        `)
+}*/
 
 function insertCity() {
     let $city = $('#city').val();
@@ -54,24 +76,27 @@ function insertCity() {
         printNameCity(responseInfoCity);
         dataUse(responseInfoCity);
         printTemperatureCity(responseInfoCity);
+        printWeatherDescription(responseInfoCity)
         changeRangeColorsTemperature(responseInfoCity);
+        showTime(responseInfoCity)
     });
 };
 
 function errorNotFound() {
     $('.error-message').text('This city doesn´t exist!').show();
-    console.log($('.label-city'));
     $('.label-city')[0].textContent ='';
     $('#city').on('click', function() {
         $('.error-message').hide('slow');
     });
-    $('#weekday')[0].textContent = '';
-    $('#full-date')[0].textContent = '';
-    $('#temperature')[0].textContent = '';
-    $('#state-icons')[0].textContent = '';
-    $('#sunrise-time')[0].textContent = '';
-    $('#sunset-time')[0].textContent = '';
-    $('#wind-icons')[0].textContent = '';
+    $('#weekday').text("")
+    $('#full-date').text("")
+    $('#temperature').text("")
+    $('#state-icons').text("")
+    $('#sunrise-time').text("")
+    $('#sunset-time').text("")
+    $('#wind-icons').text("")
+    $('#icon-location').html(`<img src="assets/svg/not-found.svg" alt="not found">`)
+    $('#current-time').text('')
 }
 
 function printNameCity(res) {
@@ -82,10 +107,13 @@ function printTemperatureCity(responseInfoCity) {
     $('#temperature').html(Math.round(responseInfoCity.main.temp) + ' °C');
 }
 
+function printWeatherDescription(res){
+    $('#weather-type').text(res.weather[0].description)
+}
 /*--------------------------Función para trabajar con los datos de la petición-------------------------------------*/
 function dataUse(response){
     renderTimes(response)
-    renderDayAndDate()
+    renderDayAndDate(response)
     setIcons(response)
 }
 
@@ -100,12 +128,30 @@ function formatTimes(date){
     return returnTime;
 }
 
+function formatHour(date){
+    let h = date.getHours();
+    let min = date.getMinutes();
+    if(h<10){h = '0' + h}
+    if(min<10){min = '0' + min};
+
+    let returnTime = `${h}:${min}`;
+    return returnTime;
+}
+
+function showTime(response){
+    let today = new Date()
+    let todayInMs = today.getTime() + (response.timezone - 3600) * 1000
+    let time = new Date(todayInMs)
+    let timeFormatted = formatHour(time)
+    $("#current-time").html(timeFormatted)
+}
+
 function renderTimes(response){
     let $sunrise = $("#sunrise-time");
     let $sunset = $("#sunset-time");
-
-    let sunriseTime = new Date(response.sys.sunrise * 1000);
-    let sunsetTime = new Date(response.sys.sunset * 1000);
+    let timeDifference = (response.timezone - 3600)
+    let sunriseTime = new Date((response.sys.sunrise + timeDifference) * 1000);
+    let sunsetTime = new Date((response.sys.sunset + timeDifference) * 1000);
 
     $sunrise.html(
         `<h4>SUNRISE TIME</h4>
@@ -115,7 +161,7 @@ function renderTimes(response){
         <p>${formatTimes(sunsetTime)}</p>`);
 }
 
-function renderDayAndDate(){
+function renderDayAndDate(response){
     let today = new Date();
 
     let y = today.getFullYear();
@@ -136,11 +182,6 @@ function setIcons(response){
     let weatherCode = response.weather[0].id.toString()[0]
     let iconLocation = $("#icon-location")
     let now = new Date().getTime();
-    console.log(now)
-    console.log(response.sys.sunset * 1000)
-    if(now > response.sys.sunset * 1000){
-        console.log("now")
-    } else {console.log("sunset")}
     switch(weatherCode){
         case "2":
             iconLocation.html(`
@@ -167,7 +208,7 @@ function setIcons(response){
                 break
             } else {
                 iconLocation.html(`
-                <img src="assets/svg/snow-night.svg" alt="snow night">`)
+                <img src="assets/svg/snowy.svg" alt="snow night">`)
                 break
             }
         case "7":
