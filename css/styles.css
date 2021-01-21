@@ -1,9 +1,7 @@
 * {
     box-sizing: border-box;
-    margin: 10px;
-    padding: 0;
     margin: 8px;
-    
+    padding: 0;
 }
 body {
     height: 100vh;
@@ -17,11 +15,10 @@ body {
     color: white;
 }
 .time{
-    margin: 0px;
     font-size: 40px;
 }
 .icon-location {
-    margin-top: 40px;
+    margin-top: 30px;
 }
 .searchbar{
     display: flex;
@@ -37,7 +34,6 @@ body {
 }
 .label-city {
     font-size: 20px;
-    
 }
 .input-city {
     height: 50px;

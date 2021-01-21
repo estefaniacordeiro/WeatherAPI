@@ -23,7 +23,7 @@ function loadInitialDom() {
     let $sectionData = $('<section class="api-data--container"></section>');
     let $temperature = $(`<section class="temperature" id="temperature"></section>`);
     let $icon = $(`<section id="icon-location"></section>
-                   <section id="current-time" class="time"></section>`);
+    <section id="current-time" class="time"></section>`);
     let $sectionSunTime = $('<section id="section-sunTime" class="section-sunTime"></section>');
     let $sunriseTime = $(`<section id="sunrise-time"></section>`);
     let $sunsetTime = $(`<section id="sunset-time"></section>`);
@@ -40,24 +40,6 @@ function loadInitialDom() {
     let $currentTime = $()
     $icon.append($currentTime)
 }
-
-/*function loadDom(){
-    let $body = $('body')
-    $body.html(`
-    <section id="main--container">
-        <section class="label-city"></section>
-        <section id="icon-location"></section>
-        <section class="temperature" id="temperature"></section>
-        <section id="weather-type"></section>
-        <section id="location-searchbar" class="searchbar">
-            <input type="text" id="city" class="input-city" onfocus="this.value=''" value="Insert a city">
-            <button id="sendBtn" class="sendBtn">Search</button>
-            <section class="error-message"></section>
-        </section>
-    </section>
-    
-        `)
-}*/
 
 function insertCity() {
     let $city = $('#city').val();
@@ -251,6 +233,7 @@ function changeRangeColorsTemperature(responseInfoCity) {
         $('body').css("background-image", "linear-gradient(rgb(143, 226, 143), rgb(38, 160, 2)");
     } else if(0 <= $temperatureOfColor && $temperatureOfColor < 10 ) {
         $('body').css("background-image", "linear-gradient(rgb(134, 179, 216), rgb(2, 97, 160))");
+
     } else {
         $('body').css("background-image", "linear-gradient(rgb(255, 255, 255), rgb(197, 197, 197))");
     }
