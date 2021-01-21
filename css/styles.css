@@ -2,6 +2,7 @@
     box-sizing: border-box;
     margin: 10px;
     padding: 0;
+    margin: 8px;
     
 }
 body {
@@ -11,7 +12,7 @@ body {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    background-image: linear-gradient(rgb(149, 125, 163), rgb(107, 59, 163));
+    background-image: linear-gradient(rgb(183, 167, 192), rgb(136, 98, 180));
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: white;
 }
@@ -19,13 +20,15 @@ body {
     margin: 0px;
     font-size: 40px;
 }
+.icon-location {
+    margin-top: 40px;
+}
 .searchbar{
     display: flex;
     flex-direction: column;
     width: 80%;
     margin-left: auto;
     margin-right: auto;
-    /* border: 1px solid yellow; */
 }
 .searchbar>input{
     border-radius: 5px;
@@ -61,7 +64,13 @@ body {
 .date--container{
     display: flex;
     flex-direction: column;
-    /* border: 1px solid red; */
+}
+.info--container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
 }
 #weekday {
     margin: 0 auto;
@@ -70,13 +79,12 @@ body {
 .api-data--container{
     display: flex;
     flex-direction: column;
-    /* border: 1px solid yellow; */
 }
 
 .temperature {
-    font-size: 20px;
+    font-size: 40px;
     font-weight: bold;
-    margin: 0 auto;
+    margin: auto auto;
 }
 .section-sunTime {
     display: flex;
@@ -84,4 +92,21 @@ body {
 }
 img{
     width: 100px;
+}
+
+.wind-icons > p{
+    font-weight: bold;
+}
+
+.section-param-wind {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.direction-wind {
+    width: 30px;
+    margin-left: 20px;
+}
+.speed-wind {
+    padding-left: 30px;
 }

@@ -16,12 +16,12 @@ function loadInitialDom() {
     let $inputCity = $(`<input type="text" id="city" class="input-city" onfocus="this.value=''" value="Insert a city">`);
     const $buttonSend = $('<button id="sendBtn" class="sendBtn">Search</button>');
     const $sectionMessageError = $('<section class="error-message"></section>');
+    let $infoContainer = $('<section class="info--container"></section>');
     let $sectionDate = $('<section class="date--container"></section>');
     let $dateWeek = $(`<time id="weekday" class="date"></time>`);
     let $fullDate = $(`<time id="full-date" class="date"></time>`);
     let $sectionData = $('<section class="api-data--container"></section>');
-    let $temperature = $(`<section class="temperature" id="temperature"></section>
-                          <section id="weather-type"></section>`);
+    let $temperature = $(`<section class="temperature" id="temperature"></section>`);
     let $icon = $(`<section id="icon-location"></section>
                    <section id="current-time" class="time"></section>`);
     let $sectionSunTime = $('<section id="section-sunTime" class="section-sunTime"></section>');
@@ -30,11 +30,12 @@ function loadInitialDom() {
     let $windIcon = $(`<section id="wind-icons"></section>`);
     $('body').append($sectionLocation);
     $sectionLocation.append($labelCity, $inputCity, $buttonSend, $sectionMessageError);
-    $('body').append($sectionDate);
+    $('body').append($infoContainer);
+    $infoContainer.append($sectionDate, $temperature)
     $('body').append($sectionData);
     $sectionDate.append($dateWeek, $fullDate);
     $sectionSunTime.append($sunriseTime, $sunsetTime);
-    $sectionData.append($temperature, $sectionSunTime, $windIcon);
+    $sectionData.append($sectionSunTime, $windIcon);
     $body.prepend($icon)
     let $currentTime = $()
     $icon.append($currentTime)
@@ -72,13 +73,14 @@ function insertCity() {
     };
 
     $.ajax(requestGetInfoCity).done(function (responseInfoCity) {
-        console.log(responseInfoCity);
-        printNameCity(responseInfoCity);
-        dataUse(responseInfoCity);
-        printTemperatureCity(responseInfoCity);
+        console.log(responseInfoCity)
+        printNameCity(responseInfoCity)
+        dataUse(responseInfoCity)
+        printTemperatureCity(responseInfoCity)
         printWeatherDescription(responseInfoCity)
-        changeRangeColorsTemperature(responseInfoCity);
+        changeRangeColorsTemperature(responseInfoCity)
         showTime(responseInfoCity)
+        printWind(responseInfoCity)
     });
 };
 
@@ -250,6 +252,20 @@ function changeRangeColorsTemperature(responseInfoCity) {
     } else if(0 <= $temperatureOfColor && $temperatureOfColor < 10 ) {
         $('body').css("background-image", "linear-gradient(rgb(134, 179, 216), rgb(2, 97, 160))");
     } else {
-        $('body').css("background-image", "linear-gradient(rgb(197, 197, 197), rgb(255, 255, 255))");
+        $('body').css("background-image", "linear-gradient(rgb(255, 255, 255), rgb(197, 197, 197))");
     }
+}
+
+function printWind(responseInfoCity) {
+    let $directionWind = responseInfoCity.wind.deg;
+    let $speedWind = Math.round(responseInfoCity.wind.speed);
+    $('#wind-icons').html(`
+    <section class="title-wind">
+        <h4>WIND</h4>
+    </section>
+    <section id="section-param-wind" class="section-param-wind">
+        <img class="direction-wind" src="assets/svg/arrow.svg" alt="Wind direction">
+        <p class="speed-wind">${$speedWind} m/s</p>
+    </section>`);
+    $('.direction-wind').css('transform', `rotate(${$directionWind}deg)`);
 }
